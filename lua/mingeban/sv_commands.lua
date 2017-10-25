@@ -79,7 +79,7 @@ function mingeban.RunCommand(name, caller, line)
 	end
 
 	if IsValid(caller) then
-		local hasPermission = caller:GetRank().permissions["command." .. cmd:GetName()]
+		local hasPermission = caller:GetRank().permissions["command." .. cmd.name]
 		if not hasPermission then -- kinda ugly
 			for alias, aliasCmd in next, mingeban.commands do
 				if aliasCmd.name == cmd.name then
@@ -90,6 +90,11 @@ function mingeban.RunCommand(name, caller, line)
 		end
 		if type(caller) == "Player" and not hasPermission and not caller:GetRank().root then
 			cmdError(caller, "Insufficient permissions.")
+			return false
+		end
+	else
+		if cmd.allowConsole == false then
+			cmdError(caller, "Command \"" .. cmd.name .. "\" unusable from console.")
 			return false
 		end
 	end
@@ -143,9 +148,8 @@ function mingeban.RunCommand(name, caller, line)
 					if istable(funcArg) then
 						local newArg = {}
 						for _, arg in next, funcArg do
-							if argData.filter(arg) then
-								newArg[#newArg] = arg
-							end
+							local filterRet = argData.filter(caller, arg)
+							newArg[#newArg + 1] = filterRet and funcArg or nil
 						end
 						funcArg = newArg
 					else
@@ -157,6 +161,11 @@ function mingeban.RunCommand(name, caller, line)
 				local endsWithVarargs = cmd.args[#cmd.args].type == ARGTYPE_VARARGS
 				if funcArg == nil and not endsWithVarargs then
 					cmdError(caller, name .. " syntax: " .. syntax)
+					return false
+				end
+
+				if istable(funcArg) and #funcArg < 1 then
+					cmdError(caller, "Couldn't find any " .. (argData.type == ARGTYPE_PLAYERS and "players" or "entities") .. ".")
 					return false
 				end
 

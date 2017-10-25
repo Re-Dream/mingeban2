@@ -52,8 +52,12 @@ if SERVER then
 	end
 end
 
+function Command:GetArguments()
+	return self.args
+end
 accessorFunc(Command, "Name", "name", false) -- no don't touch that
 accessorFunc(Command, "Help", "help", CLIENT) -- to use in future help command or something
+accessorFunc(Command, "AllowConsole", "allowConsole", CLIENT)
 
 mingeban.objects.Command = Command
 

@@ -97,26 +97,26 @@ function mingeban.utils.findEntity(str)
 
 	local found = {}
 	str = str:Trim()
-	local players = player.GetAll()
+	local plys = player.GetAll()
 
 	if str:StartWith("#") and str:len() > 1 then
 		local tag = str:lower():sub(2)
 		if tag == "all" then
-			for _, ply in next, players do
+			for _, ply in next, plys do
 				found[#found + 1] = ply
 			end
 		elseif tag == "me" then
 			found[#found + 1] = mingeban.CurrentPlayer
 		elseif tag:StartWith("rank:") and tag:len() > 4 then
 			local rank = tag:sub(4):lower()
-			for _, ply in next, players do
+			for _, ply in next, plys do
 				if ply:GetUserGroup():lower() == rank then
 					found[#found + 1] = ply
 				end
 			end
 		elseif tag:StartWith("rankf:") and tag:len() > 4 then
 			local rank = tag:sub(5):lower()
-			for _, ply in next, players do
+			for _, ply in next, plys do
 				if ply:GetUserGroup():lower():match(rank) then
 					found[#found + 1] = ply
 				end
@@ -128,7 +128,7 @@ function mingeban.utils.findEntity(str)
 		found[#found + 1] = player.GetByUniqueID(str)
 	end
 
-	for _, ply in next, players do
+	for _, ply in next, plys do
 		if str:StartWith("STEAM_0:") then
 			if ply:SteamID() == str:upper() then
 				found[#found + 1] = ply
@@ -171,9 +171,9 @@ function mingeban.utils.findEntity(str)
 
 	local foundNodupes = {}
 
-	for _, ply in next, found do
-		if not table.HasValue(foundNodupes, ply) then
-			foundNodupes[#foundNodupes + 1] = ply
+	for _, ent in next, found do
+		if not table.HasValue(foundNodupes, ent) then
+			foundNodupes[#foundNodupes + 1] = ent
 		end
 	end
 
@@ -182,14 +182,13 @@ end
 
 function mingeban.utils.findPlayer(str)
 	local results = mingeban.utils.findEntity(str)
-	local i = 0
-	for k, ent in next, results do
-		if not ent:IsPlayer() then
-			table.remove(results, k - i)
-			i = i + 1
+	local plys = {}
+	for _, ent in next, results do
+		if ent:IsPlayer() then
+			plys[#plys + 1] = ent
 		end
 	end
-	return results
+	return plys
 end
 
 function mingeban.utils.accessorFunc(tbl, keyName, key, noAddSet)

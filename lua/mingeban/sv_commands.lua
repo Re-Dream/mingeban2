@@ -247,7 +247,18 @@ function mingeban.NetworkCommands(ply)
 	net.Start("mingeban-getcommands")
 		local commands = table.Copy(mingeban.commands)
 		for name, _ in next, commands do
-			commands[name].callback = nil
+			for k, v in next, commands[name] do
+				if isfunction(v) then
+					commands[name][k] = nil
+				end
+			end
+			for _, arg in next, commands[name].args do
+				for k, v in next, arg do
+					if isfunction(v) then
+						arg[k] = nil
+					end
+				end
+			end
 		end
 		net.WriteTable(commands)
 	if ply then

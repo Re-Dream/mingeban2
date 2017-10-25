@@ -47,6 +47,16 @@ if SERVER then
 	end
 
 	hook.Add("MingebanInitialized", "mingeban-countdown", function()
+		local countdown = mingeban.CreateCommand("countdown", function(caller, line, time, text)
+			mingeban.Countdown(time, function() end, text)
+			mingeban.utils.print(mingeban.colors.Cyan, tostring(caller) .. " started countdown \"" .. text .. "\"")
+		end)
+		countdown:AddArgument(ARGTYPE_NUMBER)
+			:SetName("time")
+		countdown:AddArgument(ARGTYPE_STRING)
+			:SetName("text")
+			:SetOptional(true)
+
 		local abort = mingeban.CreateCommand("abort", function(caller)
 			mingeban.AbortCountdown()
 			mingeban.utils.print(mingeban.colors.Cyan, tostring(caller) .. " aborted countdown" .. (mingeban.LastCountdown and " \"" .. mingeban.LastCountdown .. "\"" or ""))

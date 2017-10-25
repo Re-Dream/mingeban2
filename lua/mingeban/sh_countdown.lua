@@ -49,7 +49,7 @@ if SERVER then
 	hook.Add("MingebanInitialized", "mingeban-countdown", function()
 		local countdown = mingeban.CreateCommand("countdown", function(caller, line, time, text)
 			mingeban.Countdown(time, function() end, text)
-			mingeban.utils.print(mingeban.colors.Cyan, tostring(caller) .. " started countdown \"" .. text .. "\"")
+			mingeban.utils.print(mingeban.colors.Cyan, tostring(caller) .. " started countdown" .. (text and " \"" .. text .. "\"" or ""))
 		end)
 		countdown:AddArgument(ARGTYPE_NUMBER)
 			:SetName("time")

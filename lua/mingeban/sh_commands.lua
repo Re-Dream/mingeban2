@@ -88,7 +88,15 @@ function mingeban.GetCommand(name)
 
 	return mingeban.commands[name]
 end
-function mingeban.GetCommands()
-	return mingeban.commands
+function mingeban.GetCommands(noDupes)
+	local cmds = noDupes and {} or mingeban.commands
+	if noDupes then
+		for name, cmd in next, mingeban.commands do
+			if cmd.name == name then
+				cmds[name] = cmd
+			end
+		end
+	end
+	return cmds
 end
 

@@ -147,9 +147,9 @@ function mingeban.RunCommand(name, caller, line)
 				if argData.filter then
 					if istable(funcArg) then
 						local newArg = {}
-						for _, arg in next, funcArg do
+						for k, arg in next, funcArg do
 							local filterRet = argData.filter(caller, arg)
-							newArg[#newArg + 1] = filterRet and funcArg or nil
+							newArg[#newArg + 1] = filterRet and funcArg[k] or nil
 						end
 						funcArg = newArg
 					else

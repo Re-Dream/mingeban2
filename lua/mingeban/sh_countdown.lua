@@ -157,7 +157,7 @@ elseif CLIENT then
 
 		-- text setup
 		surface.SetFont("mingeban-countdown")
-		local txt = string.format("%.2d:%06.3f", remaining / 60, math.Round(remaining, 3) % 60)
+		local txt = string.format("%.2d:%06.3f", math.floor(remaining / 60), math.Round(remaining, 3) % 60)
 		local sec = math.ceil(remaining)
 		if last ~= sec then -- everytime the time changes...
 			if last then -- don't play a sound the first time we set the variable

@@ -1,6 +1,7 @@
 
 local checkParam = mingeban.utils.checkParam
 local accessorFunc = mingeban.utils.accessorFunc
+local validSteamID = mingeban.utils.validSteamID
 
 mingeban.ranks = {}
 mingeban.users = {}
@@ -109,7 +110,7 @@ function Rank:GetUser(sid)
 		return mingeban.users[self.name][sid:SteamID()] and sid or false
 	else
 		checkParam(sid, "string", 1, "GetUser")
-		assert(sid:Trim():match("^STEAM_0:%d:%d+$"), "bad argument #1 to 'GetUser' (invalid SteamID)")
+		assert(validSteamID(sid), "bad argument #1 to 'GetUser' (invalid SteamID)")
 
 		local ply = player.GetBySteamID(sid)
 		if not IsValid(ply) then
@@ -178,6 +179,7 @@ function PLAYER:HasPermission(name)
 end
 
 --[[ useless, this is default
+add IsAdmin and IsSuperAdmin override later
 
 function PLAYER:GetUserGroup()
 	return self:GetNWString("UserGroup", "user")

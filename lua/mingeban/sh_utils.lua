@@ -44,7 +44,6 @@ function mingeban.utils.parseArgs(str) -- featuring no continues and better pars
 
 		if cont then
 			if ((arg ~= "" and grouping) or (arg == "" and not grouping)) and c:match(grouper or mingeban.utils.CmdArgGrouper) then -- do we try to group
-
 				if not before or before and not escaping then -- are we escaping or starting a command
 					if not grouper then
 						grouper = c -- pick the current grouper
@@ -58,12 +57,10 @@ function mingeban.utils.parseArgs(str) -- featuring no continues and better pars
 				elseif escaping then
 					escaping = false -- we escaped the character, disable it
 				end
-
 			end
 
 			if cont then
 				if c:match(separator or mingeban.utils.CmdArgSeparators) and not grouping then -- are we separating and not grouping
-
 					if not separator then
 						separator = c -- pick the current separator
 					end
@@ -72,7 +69,6 @@ function mingeban.utils.parseArgs(str) -- featuring no continues and better pars
 						arg = "" -- reset arg
 					end
 					cont = false -- let's get the next arg going
-
 				end
 
 				if cont then
@@ -84,7 +80,6 @@ function mingeban.utils.parseArgs(str) -- featuring no continues and better pars
 
 			end
 		end
-
 	end
 
 	return ret -- give results!!
@@ -148,14 +143,6 @@ function mingeban.utils.findEntity(str)
 	end
 
 	for _, ent in next, ents.GetAll() do
-		--[[ might be needed?
-
-		local nonum = str:gsub("(%d+)", "")
-		if nonum == "" then
-			nonum = nil
-		end
-
-		]]
 		if ent:GetClass():match(str) then
 			found[#found + 1] = ent
 		end
@@ -203,5 +190,9 @@ function mingeban.utils.accessorFunc(tbl, keyName, key, noAddSet)
 	tbl["Get" .. keyName] = function(self)
 		return self[key]
 	end
+end
+
+function mingeban.utils.validSteamID(sid)
+	return sid:upper():Trim():match("^STEAM_0:%d:%d+$")
 end
 

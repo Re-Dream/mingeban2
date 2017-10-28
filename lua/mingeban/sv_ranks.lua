@@ -7,7 +7,6 @@ function mingeban.CreateRank(name, level, root)
 	checkParam(name, "string", 1, "CreateRank")
 	checkParam(level, "number", 2, "CreateRank")
 	checkParam(root, "boolean", 3, "CreateRank")
-
 	assert(not istable(mingeban.ranks[level]), "rank with level " .. tostring(level) .. " already exists!")
 	assert(not istable(mingeban.GetRank(name)), "rank with name " .. name .. " already exists!")
 
@@ -73,6 +72,8 @@ end
 util.AddNetworkString("mingeban-getranks")
 
 function mingeban.NetworkRanks(ply)
+	checkParam(ply, "Player", 1, "NetworkRanks")
+
 	net.Start("mingeban-getranks")
 		net.WriteTable(mingeban.ranks)
 		net.WriteTable(mingeban.users)
@@ -101,6 +102,8 @@ function mingeban.SaveUsers()
 
 	mingeban.NetworkRanks()
 end
+
+-- PLAYER META
 
 local PLAYER = FindMetaTable("Player")
 

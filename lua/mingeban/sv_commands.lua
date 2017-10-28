@@ -222,8 +222,6 @@ function mingeban.RunCommand(name, caller, line)
 end
 mingeban.CallCommand = mingeban.RunCommand
 
--- load commands
-
 local testargsCmd = mingeban.CreateCommand("testargs", function(caller, line, ...)
 	print("Line: " .. line)
 	print("Arguments: ")
@@ -244,6 +242,7 @@ testargsCmd:AddArgument(ARGTYPE_VARARGS)
 util.AddNetworkString("mingeban-getcommands")
 
 function mingeban.NetworkCommands(ply)
+	assert(ply == nil or (IsValid(ply) and ply:IsPlayer()), "bad argument #1 to 'Ban' (invalid SteamID)")
 	net.Start("mingeban-getcommands")
 		local commands = table.Copy(mingeban.commands)
 		for name, _ in next, commands do
@@ -289,6 +288,8 @@ concommand.Add("mingeban", function(ply, _, cmd, args)
 	local args = args:sub(cmd:len() + 2):Trim()
 	mingeban.RunCommand(cmd, ply, args)
 end)
+
+-- load commands
 
 for _, file in next, (file.Find("mingeban/commands/*.lua", "LUA")) do
 	AddCSLuaFile("mingeban/commands/" .. file)

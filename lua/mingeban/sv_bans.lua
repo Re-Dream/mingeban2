@@ -1,8 +1,18 @@
 
 local checkParam = mingeban.utils.checkParam
+local validSteamID = mingeban.utils.validSteamID
 
 function mingeban.LoadBans()
 	mingeban.Bans = file.Exists("mingeban/bans.txt", "DATA") and util.JSONToTable(file.Read("mingeban/bans.txt")) or {}
+end
+function mingeban.SaveBans()
+	file.Write("mingeban/bans.txt", util.TableToJSON(mingeban.Bans))
+end
+function mingeban.GetBan(sid)
+	checkParam(sid, "string", 1, "GetBan")
+	assert(validSteamID(sid), "bad argument #1 to 'GetBan' (invalid SteamID)")
+
+	return mingeban.Bans[sid]
 end
 
 function mingeban.Ban(sid, time, reason)
@@ -10,7 +20,7 @@ function mingeban.Ban(sid, time, reason)
 		sid = sid:SteamID()
 	end
 	checkParam(sid, "string", 1, "Ban")
-	assert(sid:Trim():match("^STEAM_0:%d:%d+$"), "bad argument #1 to 'Ban' (invalid SteamID)")
+	assert(validSteamID(sid), "bad argument #1 to 'Ban' (invalid SteamID)")
 	checkParam(time, "number", 2, "Ban")
 	checkParam(reason, "string", 3, "Ban")
 
@@ -18,15 +28,12 @@ function mingeban.Ban(sid, time, reason)
 
 	mingeban.SaveBans()
 end
-
 function mingeban.Unban(sid)
+	checkParam(sid, "string", 1, "Unban")
+	assert(validSteamID(sid), "bad argument #1 to 'Unban' (invalid SteamID)")
 	mingeban.Bans[sid] = nil
 
 	mingeban.SaveBans()
-end
-
-function mingeban.SaveBans()
-	file.Write("mingeban/bans.txt", util.TableToJSON(mingeban.bans))
 end
 
 hook.Add("CheckPassword", "mingeban-bans", function(sid)

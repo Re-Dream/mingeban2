@@ -29,7 +29,7 @@ if SERVER then
 		return self
 	end
 	function Rank:SetRoot(root)
-		checkParam(name, "boolean", 1, "SetRoot")
+		checkParam(root, "boolean", 1, "SetRoot")
 
 		self.root = root
 
@@ -100,7 +100,7 @@ function Rank:GetPermission(perm)
 	return self.permissions[perm]
 end
 function Rank:GetPermissions()
-	return self.root or self.permissions
+	return self.permissions
 end
 
 function Rank:GetUser(sid)

@@ -165,13 +165,16 @@ function PLAYER:CheckUserGroupLevel(name)
 		return true
 	end
 end
-function PLAYER:GetRank(name)
+function PLAYER:GetRank()
 	return mingeban.GetRank(self:GetUserGroup())
 end
 function PLAYER:IsUserGroup(name)
 	checkParam(name, "string", 1, "IsUserGroup")
 
 	return self:GetUserGroup() == name:lower()
+end
+function PLAYER:HasPermission(name)
+	return self:GetRank():HasPermission(name)
 end
 
 --[[ useless, this is default

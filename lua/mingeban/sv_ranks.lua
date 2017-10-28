@@ -127,3 +127,4 @@ hook.Add("PlayerInitialSpawn", "mingeban-ranks", function(ply)
 end)
 
 mingeban.InitializeRanks()
+

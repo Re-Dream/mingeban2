@@ -242,7 +242,8 @@ testargsCmd:AddArgument(ARGTYPE_VARARGS)
 util.AddNetworkString("mingeban-getcommands")
 
 function mingeban.NetworkCommands(ply)
-	assert(ply == nil or (IsValid(ply) and ply:IsPlayer()), "bad argument #1 to 'Ban' (invalid SteamID)")
+	assert(ply == nil or (IsValid(ply) and ply:IsPlayer()), "bad argument #1 to 'NetworkCommands' (invalid SteamID)")
+
 	net.Start("mingeban-getcommands")
 		local commands = table.Copy(mingeban.commands)
 		for name, _ in next, commands do

@@ -72,7 +72,7 @@ end
 util.AddNetworkString("mingeban-getranks")
 
 function mingeban.NetworkRanks(ply)
-	checkParam(ply, "Player", 1, "NetworkRanks")
+	assert(ply == nil or (IsValid(ply) and ply:IsPlayer()), "bad argument #1 to 'NetworkRanks' (invalid SteamID)")
 
 	net.Start("mingeban-getranks")
 		net.WriteTable(mingeban.ranks)

@@ -99,6 +99,7 @@ function Rank:GetPermission(perm)
 
 	return self.permissions[perm]
 end
+Rank.HasPermission = Rank.GetPermission
 function Rank:GetPermissions()
 	return self.permissions
 end
@@ -137,7 +138,6 @@ function mingeban.GetRank(name)
 			return mingeban.ranks[level]
 		end
 	end
-
 end
 function mingeban.GetRanks()
 	return mingeban.ranks

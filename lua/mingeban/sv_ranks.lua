@@ -74,14 +74,16 @@ util.AddNetworkString("mingeban-getranks")
 function mingeban.NetworkRanks(ply)
 	assert(ply == nil or (IsValid(ply) and ply:IsPlayer()), "bad argument #1 to 'NetworkRanks' (invalid SteamID)")
 
-	net.Start("mingeban-getranks")
-		net.WriteTable(mingeban.ranks)
-		net.WriteTable(mingeban.users)
-	if ply then
-		net.Send(ply)
-	else
-		net.Broadcast()
-	end
+	timer.Create("mingeban-networkranks", 1, 1, function()
+		net.Start("mingeban-getranks")
+			net.WriteTable(mingeban.ranks)
+			net.WriteTable(mingeban.users)
+		if ply then
+			net.Send(ply)
+		else
+			net.Broadcast()
+		end
+	end)
 end
 
 function mingeban.SaveRanks()

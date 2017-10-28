@@ -244,28 +244,30 @@ util.AddNetworkString("mingeban-getcommands")
 function mingeban.NetworkCommands(ply)
 	assert(ply == nil or (IsValid(ply) and ply:IsPlayer()), "bad argument #1 to 'NetworkCommands' (invalid SteamID)")
 
-	net.Start("mingeban-getcommands")
-		local commands = table.Copy(mingeban.commands)
-		for name, _ in next, commands do
-			for k, v in next, commands[name] do
-				if isfunction(v) then
-					commands[name][k] = nil
-				end
-			end
-			for _, arg in next, commands[name].args do
-				for k, v in next, arg do
+	timer.Create("mingeban-networkcommands", 1, 1, function()
+		net.Start("mingeban-getcommands")
+			local commands = table.Copy(mingeban.commands)
+			for name, _ in next, commands do
+				for k, v in next, commands[name] do
 					if isfunction(v) then
-						arg[k] = nil
+						commands[name][k] = nil
+					end
+				end
+				for _, arg in next, commands[name].args do
+					for k, v in next, arg do
+						if isfunction(v) then
+							arg[k] = nil
+						end
 					end
 				end
 			end
+			net.WriteTable(commands)
+		if ply then
+			net.Send(ply)
+		else
+			net.Broadcast()
 		end
-		net.WriteTable(commands)
-	if ply then
-		net.Send(ply)
-	else
-		net.Broadcast()
-	end
+	end)
 end
 
 hook.Add("PlayerInitialSpawn", "mingeban-commands", function(ply)

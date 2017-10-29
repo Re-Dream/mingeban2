@@ -87,72 +87,74 @@ end
 
 -- From original mingeban, could be useful
 -- Written by Xaotic, optimized by Tenrys
-function mingeban.utils.findEntity(str)
-	mingeban.utils.checkParam(str, "string", 1, "findEntity")
+function mingeban.utils.findEntity(fullStr)
+	mingeban.utils.checkParam(fullStr, "string", 1, "findEntity")
 
 	local found = {}
-	str = str:Trim()
+	fullStr = fullStr:Trim()
 	local plys = player.GetAll()
 
-	if str:StartWith("#") and str:len() > 1 then
-		local tag = str:lower():sub(2)
-		if tag == "all" then
-			for _, ply in next, plys do
-				found[#found + 1] = ply
+	for str in string.gmatch(fullStr, "([#_:%w]+)%+?") do
+		if str:StartWith("#") and str:len() > 1 then
+			local tag = str:lower():sub(2)
+			if tag == "all" then
+				for _, ply in next, plys do
+					found[#found + 1] = ply
+				end
+			elseif tag == "me" then
+				found[#found + 1] = mingeban.CurrentPlayer
+			elseif tag:StartWith("rank:") and tag:len() > 4 then
+				local rank = tag:sub(4):lower()
+				for _, ply in next, plys do
+					if ply:GetUserGroup():lower() == rank then
+						found[#found + 1] = ply
+					end
+				end
+			elseif tag:StartWith("rankf:") and tag:len() > 4 then
+				local rank = tag:sub(5):lower()
+				for _, ply in next, plys do
+					if ply:GetUserGroup():lower():match(rank) then
+						found[#found + 1] = ply
+					end
+				end
 			end
-		elseif tag == "me" then
-			found[#found + 1] = mingeban.CurrentPlayer
-		elseif tag:StartWith("rank:") and tag:len() > 4 then
-			local rank = tag:sub(4):lower()
-			for _, ply in next, plys do
-				if ply:GetUserGroup():lower() == rank then
+		end
+
+		if IsValid(player.GetByUniqueID(str)) then
+			found[#found + 1] = player.GetByUniqueID(str)
+		end
+
+		for _, ply in next, plys do
+			if str:StartWith("STEAM_0:") then
+				if ply:SteamID() == str:upper() then
 					found[#found + 1] = ply
 				end
 			end
-		elseif tag:StartWith("rankf:") and tag:len() > 4 then
-			local rank = tag:sub(5):lower()
-			for _, ply in next, plys do
-				if ply:GetUserGroup():lower():match(rank) then
-					found[#found + 1] = ply
-				end
-			end
-		end
-	end
 
-	if IsValid(player.GetByUniqueID(str)) then
-		found[#found + 1] = player.GetByUniqueID(str)
-	end
-
-	for _, ply in next, plys do
-		if str:StartWith("STEAM_0:") then
-			if ply:SteamID() == str:upper() then
+			if ply:Nick():lower():match(str:lower()) then
 				found[#found + 1] = ply
 			end
 		end
 
-		if ply:Nick():lower():match(str:lower()) then
-			found[#found + 1] = ply
-		end
-	end
-
-	if str:StartWith("_") and str:len() > 1 then
-		local ent = Entity(tonumber(str:sub(2)))
-		if ent then
-			found[#found + 1] = ent
-		end
-	end
-
-	for _, ent in next, ents.GetAll() do
-		if ent:GetClass():match(str) then
-			found[#found + 1] = ent
+		if str:StartWith("_") and str:len() > 1 then
+			local ent = Entity(tonumber(str:sub(2)))
+			if ent then
+				found[#found + 1] = ent
+			end
 		end
 
-		if ent:GetName():match(str) then
-			found[#found + 1] = ent
-		end
+		for _, ent in next, ents.GetAll() do
+			if ent:GetClass():match(str) then
+				found[#found + 1] = ent
+			end
 
-		if ent.GetModel and isstring(ent:GetModel()) and ent:GetModel():match(str) then
-			found[#found + 1] = ent
+			if ent:GetName():match(str) then
+				found[#found + 1] = ent
+			end
+
+			if ent.GetModel and isstring(ent:GetModel()) and ent:GetModel():match(str) then
+				found[#found + 1] = ent
+			end
 		end
 	end
 

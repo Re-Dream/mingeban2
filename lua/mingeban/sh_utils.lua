@@ -101,8 +101,13 @@ function mingeban.utils.findEntity(fullStr)
 				for _, ply in next, plys do
 					found[#found + 1] = ply
 				end
-			elseif tag == "me" then
+			elseif tag == "me" and mingeban.CurrentPlayer then
 				found[#found + 1] = mingeban.CurrentPlayer
+			elseif tag == "this" and mingeban.CurrentPlayer then
+				local trace = mingeban.CurrentPlayer:GetEyeTrace()
+				if trace and IsValid(trace.Entity) then
+					found[#found + 1] = trace.Entity
+				end
 			elseif tag:StartWith("rank:") and tag:len() > 4 then
 				local rank = tag:sub(4):lower()
 				for _, ply in next, plys do

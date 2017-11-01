@@ -204,6 +204,12 @@ function mingeban.RunCommand(name, caller, line)
 
 	]]
 
+	local ok, reason = hook.Run("MingebanCommand", caller, line, unpack(args or {}))
+	if ok == false then
+		cmdError(caller, reason)
+		return false
+	end
+
 	local ok2, err2
 	local ok, err = pcall(function()
 		ok2, err2 = cmd.callback(IsValid(caller) and caller or "CONSOLE", line, unpack(args or {}))

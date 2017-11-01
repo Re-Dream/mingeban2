@@ -212,7 +212,7 @@ function mingeban.RunCommand(name, caller, line)
 
 	local ok2, err2
 	local ok, err = pcall(function()
-		ok2, err2 = cmd.callback(IsValid(caller) and caller or "CONSOLE", line, unpack(args or {}))
+		ok2, err2 = cmd.callback(IsValid(caller) and caller or "CONSOLE", name, line, unpack(args or {}))
 	end)
 
 	mingeban.CurrentPlayer = nil

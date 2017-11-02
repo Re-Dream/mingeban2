@@ -100,7 +100,12 @@ function Rank:GetPermission(perm)
 
 	return self.permissions[perm]
 end
-Rank.HasPermission = Rank.GetPermission
+function Rank:HasPermission(perm)
+	checkParam(perm, "string", 1, "HasPermission")
+
+	if self.root then return true end
+	return self:GetPermission(perm)
+end
 function Rank:GetPermissions()
 	return self.permissions
 end

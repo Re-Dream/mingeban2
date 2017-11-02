@@ -316,7 +316,8 @@ hook.Add("PlayerSay", "mingeban-commands", function(ply, txt)
 
 		local args = txt:sub(prefix:len() + 1 + cmd:len() + 1)
 
-		return mingeban.RunCommand(cmd, ply, args)
+		local result = mingeban.RunCommand(cmd, ply, args)
+		if result == "" then return "" end
 	end
 end)
 

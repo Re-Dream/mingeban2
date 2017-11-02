@@ -225,6 +225,8 @@ function mingeban.RunCommand(name, caller, line)
 		cmdError(caller, err2)
 		return false
 	end
+
+	if cmd.hideChat then return "" end
 end
 mingeban.CallCommand = mingeban.RunCommand
 
@@ -314,7 +316,7 @@ hook.Add("PlayerSay", "mingeban-commands", function(ply, txt)
 
 		local args = txt:sub(prefix:len() + 1 + cmd:len() + 1)
 
-		mingeban.RunCommand(cmd, ply, args)
+		return mingeban.RunCommand(cmd, ply, args)
 	end
 end)
 

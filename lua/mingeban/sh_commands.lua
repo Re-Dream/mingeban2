@@ -58,6 +58,7 @@ end
 accessorFunc(Command, "Name", "name", false) -- no don't touch that
 accessorFunc(Command, "Help", "help", CLIENT) -- to use in future help command or something
 accessorFunc(Command, "AllowConsole", "allowConsole", CLIENT)
+accessorFunc(Command, "HideChat", "hideChat", CLIENT)
 
 mingeban.objects.Command = Command
 

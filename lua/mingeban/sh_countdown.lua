@@ -27,7 +27,7 @@ if SERVER then
 			end
 		end)
 
-		mingeban.LastCountdown = text:Trim() ~= "" and text or nil
+		mingeban.LastCountdown = text
 	end
 
 	function mingeban.IsCountdownActive()
@@ -44,12 +44,14 @@ if SERVER then
 		if mingeban.IsCountdownActive() then
 			hook.Remove("Think", "mingeban-countdown")
 		end
+
+		mingeban.LastCountdown = nil
 	end
 
 	hook.Add("MingebanInitialized", "mingeban-countdown", function()
 		local countdown = mingeban.CreateCommand("countdown", function(caller, line, time, text)
-			mingeban.Countdown(time, function() end, text)
 			mingeban.utils.print(mingeban.colors.Cyan, tostring(caller) .. " started countdown" .. (text and " \"" .. text .. "\"" or ""))
+			mingeban.Countdown(time, function() end, text)
 		end)
 		countdown:AddArgument(ARGTYPE_NUMBER)
 			:SetName("time")
@@ -58,8 +60,10 @@ if SERVER then
 			:SetOptional(true)
 
 		local abort = mingeban.CreateCommand("abort", function(caller)
+			if not mingeban.LastCountdown then return false, "No countdown to abort" end
+
+			mingeban.utils.print(mingeban.colors.Cyan, tostring(caller) .. " aborted countdown" .. (mingeban.LastCountdown:Trim() ~= "" and " \"" .. mingeban.LastCountdown .. "\"" or ""))
 			mingeban.AbortCountdown()
-			mingeban.utils.print(mingeban.colors.Cyan, tostring(caller) .. " aborted countdown" .. (mingeban.LastCountdown and " \"" .. mingeban.LastCountdown .. "\"" or ""))
 		end)
 	end)
 elseif CLIENT then

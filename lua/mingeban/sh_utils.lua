@@ -94,7 +94,7 @@ function mingeban.utils.findEntity(fullStr)
 	fullStr = fullStr:Trim()
 	local plys = player.GetAll()
 
-	for str in string.gmatch(fullStr, "([#_:%w]+)%+?") do
+	for _, str in next, fullStr:Split("+") do
 		if str:StartWith("#") and str:len() > 1 then
 			local tag = str:lower():sub(2)
 			if tag == "all" then

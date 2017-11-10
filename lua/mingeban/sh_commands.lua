@@ -91,12 +91,12 @@ function mingeban.GetCommand(name)
 	for cmdName, cmdData in next, mingeban.commands do
 		if type(cmdName) == "table" then
 			for _, cmdName in next, cmdName do
-				if cmdName:lower():match(name) then
+				if cmdName:lower() == name:lower() then
 					cmd = cmdData
 					break
 				end
 			end
-		elseif cmdName:lower():match(name) then
+		elseif cmdName:lower() == name:lower() then
 			cmd = cmdData
 			break
 		end

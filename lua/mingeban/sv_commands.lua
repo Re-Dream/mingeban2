@@ -12,40 +12,22 @@ local function registerCommand(name, callback)
 	mingeban.commands[name] = setmetatable({
 		callback = callback, -- caller, line, ...
 		args = {},
-		name = name,
+		name = istable(name) and name[1] or name,
 	}, Command)
 	return mingeban.commands[name]
 end
 function mingeban.CreateCommand(name, callback)
 	checkParam(callback, "function", 2, "CreateCommand")
 
-	if istable(name) then
-		local cmd
-		for k, name in next, name do
-			if k == 1 then
-				cmd = registerCommand(name, callback)
-			else
-				mingeban.commands[name] = cmd
-			end
-		end
+	if not istable(name) then checkParam(name, "string", 1, "CreateCommand") end
 
-		local func = net.Receivers["mingeban-getcommands"]
-		if func then
-			func(nil, player.GetAll())
-		end
+	local cmd = registerCommand(name, callback)
 
-		return cmd
-	else
-		checkParam(name, "string", 1, "CreateCommand")
-
-		local cmd = registerCommand(name, callback)
-
-		local func = net.Receivers["mingeban-getcommands"]
-		if func then
-			func(nil, player.GetAll())
-		end
-		return cmd
+	local func = net.Receivers["mingeban-getcommands"]
+	if func then
+		func(nil, player.GetAll())
 	end
+	return cmd
 end
 mingeban.AddCommand = mingeban.CreateCommand
 
@@ -70,7 +52,7 @@ function mingeban.RunCommand(name, caller, line)
 	checkParam(name, "string", 1, "RunCommand")
 	checkParam(line, "string", 3, "RunCommand")
 
-	local cmd = mingeban.commands[name]
+	local cmd = mingeban.GetCommand(name)
 	if not cmd then
 		if not IsValid(caller) or mingeban_unknowncmd_notify:GetBool() then
 			cmdError(caller, "Unknown command.")
@@ -79,15 +61,7 @@ function mingeban.RunCommand(name, caller, line)
 	end
 
 	if IsValid(caller) then
-		local hasPermission = caller:GetRank().permissions["command." .. cmd.name]
-		if not hasPermission then -- kinda ugly
-			for alias, aliasCmd in next, mingeban.commands do
-				if aliasCmd.name == cmd.name then
-					hasPermission = caller:GetRank().permissions["command." .. alias]
-					if hasPermission then break end
-				end
-			end
-		end
+		local hasPermission = caller:HasPermission("command." .. cmd.name)
 		if type(caller) == "Player" and not hasPermission and not caller:GetRank().root then
 			cmdError(caller, "Insufficient permissions.")
 			return false

@@ -65,7 +65,7 @@ mingeban.objects.Command = Command
 -- Command object defined.
 
 function mingeban.GetCommandSyntax(name)
-	local cmd = mingeban.commands[name]
+	local cmd = mingeban.GetCommand(name)
 	if not cmd then return end
 
 	local str = ""
@@ -87,9 +87,26 @@ end
 function mingeban.GetCommand(name)
 	checkParam(name, "string", 1, "GetCommand")
 
-	return mingeban.commands[name]
+	local cmd
+	for cmdName, cmdData in next, mingeban.commands do
+		if type(cmdName) == "table" then
+			for _, cmdName in next, cmdName do
+				if cmdName:lower():match(name) then
+					cmd = cmdData
+					break
+				end
+			end
+		elseif cmdName:lower():match(name) then
+			cmd = cmdData
+			break
+		end
+	end
+
+	return cmd
 end
-function mingeban.GetCommands(noDupes)
+function mingeban.GetCommands()
+	local cmds = mingeban.commands
+	--[[
 	local cmds = noDupes and {} or mingeban.commands
 	if noDupes then
 		for name, cmd in next, mingeban.commands do
@@ -98,6 +115,7 @@ function mingeban.GetCommands(noDupes)
 			end
 		end
 	end
+	]]
 	return cmds
 end
 

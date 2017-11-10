@@ -12,8 +12,9 @@ function mingeban.ConsoleAutoComplete(_, args)
 	table.remove(argsTbl, 1)
 
 	local argsStr = args:sub(cmd:len() + 2):Trim()
+	local cmdData
 	if cmd then
-		local cmdData = mingeban.commands[cmd]
+		cmdData = mingeban.GetCommand(cmd)
 		if cmdData then
 			local curArg = argsTbl[#argsTbl]
 			local argData = cmdData.args[#argsTbl]
@@ -27,9 +28,15 @@ function mingeban.ConsoleAutoComplete(_, args)
 				end
 			end
 		else
-			for name, cmdData in next, mingeban.commands do
-				if name:lower():match(cmd) then
-					autoComplete[#autoComplete + 1] = name -- autocomplete command
+			for cmdName, cmdData in next, mingeban.commands do
+				if type(cmdName) == "table" then
+					for _, cmdName in next, cmdName do
+						if cmdName:lower():match(cmd) then
+							autoComplete[#autoComplete + 1] = cmdName -- autocomplete command
+						end
+					end
+				elseif cmdName:lower():match(cmd) then
+					autoComplete[#autoComplete + 1] = cmdName -- autocomplete command
 				end
 			end
 		end
@@ -38,11 +45,11 @@ function mingeban.ConsoleAutoComplete(_, args)
 	for k, v in next, autoComplete do -- adapt for console use
 		local curArg = argsTbl[#argsTbl] or ""
 		local argsStr = argsStr:sub(1, argsStr:len() - curArg:len(), 0):Trim()
-		autoComplete[k] = "mingeban" .. (mingeban.commands[cmd] and (" " .. cmd .. " ") or "") .. argsStr .. " " .. v
+		autoComplete[k] = "mingeban" .. (cmdData and (" " .. cmd .. " ") or "") .. argsStr .. " " .. v
 	end
 
 	if table.Count(autoComplete) <= 0 then -- no suggestions? print syntax
-		autoComplete[1] = mingeban.commands[cmd] and "mingeban " .. (cmd or "") .. ((" " .. mingeban.GetCommandSyntax(cmd)) or "")
+		autoComplete[1] = cmdData and "mingeban " .. (cmd or "") .. ((" " .. mingeban.GetCommandSyntax(cmd)) or "")
 	end
 
 	return autoComplete

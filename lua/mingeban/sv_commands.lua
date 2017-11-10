@@ -21,6 +21,18 @@ function mingeban.CreateCommand(name, callback)
 
 	if not istable(name) then checkParam(name, "string", 1, "CreateCommand") end
 
+	if istable(name) then
+		for cmdName, cmdData in next, mingeban.commands do
+			if istable(cmdName) then
+				for _, _cmdName in next, name do
+					if table.HasValue(cmdName, _cmdName) then
+						mingeban.commands[cmdName] = nil
+						break
+					end
+				end
+			end
+		end
+	end
 	local cmd = registerCommand(name, callback)
 
 	local func = net.Receivers["mingeban-getcommands"]

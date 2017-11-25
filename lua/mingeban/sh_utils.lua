@@ -149,16 +149,18 @@ function mingeban.utils.findEntity(fullStr)
 		end
 
 		for _, ent in next, ents.GetAll() do
-			if ent:GetClass():match(str) then
-				found[#found + 1] = ent
-			end
+			if IsValid(ent) then
+				if ent:GetClass():match(str) then
+					found[#found + 1] = ent
+				end
 
-			if ent:GetName():match(str) then
-				found[#found + 1] = ent
-			end
+				if ent:GetName():match(str) then
+					found[#found + 1] = ent
+				end
 
-			if ent.GetModel and isstring(ent:GetModel()) and ent:GetModel():match(str) then
-				found[#found + 1] = ent
+				if ent.GetModel and isstring(ent:GetModel()) and ent:GetModel():match(str) then
+					found[#found + 1] = ent
+				end
 			end
 		end
 	end

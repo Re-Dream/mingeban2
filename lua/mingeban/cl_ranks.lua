@@ -1,7 +1,7 @@
 
 local Rank = mingeban.objects.Rank
 
-net.Receive("mingeban-getranks", function()
+net.Receive("mingeban_getranks", function()
 	local ranks
 	local succ = pcall(function()
 		ranks = net.ReadTable()

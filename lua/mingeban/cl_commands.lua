@@ -55,7 +55,7 @@ function mingeban.ConsoleAutoComplete(_, args)
 	return autoComplete
 end
 
-net.Receive("mingeban-getcommands", function()
+net.Receive("mingeban_getcommands", function()
 	local commands
 	local succ = pcall(function()
 		commands = net.ReadTable()
@@ -80,7 +80,7 @@ concommand.Add("mingeban", function(ply, _, cmd, args)
 	args = table.concat(args, " ")
 	-- local args = args:sub(cmd:len() + 2):Trim()
 
-	net.Start("mingeban-runcommand")
+	net.Start("mingeban_runcommand")
 		net.WriteString(cmd)
 		net.WriteString(args)
 	net.SendToServer()
@@ -91,7 +91,7 @@ for _, file in next, (file.Find("mingeban/commands/*.lua", "LUA")) do
 	include("mingeban/commands/" .. file)
 end
 
-net.Receive("mingeban-cmderror", function()
+net.Receive("mingeban_cmderror", function()
 	local reason
 	local succ = pcall(function()
 		reason = net.ReadString()

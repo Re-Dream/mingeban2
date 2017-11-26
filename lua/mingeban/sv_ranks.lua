@@ -69,13 +69,13 @@ end
 
 -- networking
 
-util.AddNetworkString("mingeban-getranks")
+util.AddNetworkString("mingeban_getranks")
 
 function mingeban.NetworkRanks(ply)
 	assert(ply == nil or (IsValid(ply) and ply:IsPlayer()), "bad argument #1 to 'NetworkRanks' (invalid SteamID)")
 
-	timer.Create("mingeban-networkranks", 1, 1, function()
-		net.Start("mingeban-getranks")
+	timer.Create("mingeban_networkranks", 1, 1, function()
+		net.Start("mingeban_getranks")
 			net.WriteTable(mingeban.ranks)
 			net.WriteTable(mingeban.users)
 		if ply then
@@ -116,7 +116,7 @@ function PLAYER:SetUserGroup(name)
 	rank:AddUser(self)
 end
 
-hook.Add("PlayerInitialSpawn", "mingeban-ranks", function(ply)
+hook.Add("PlayerInitialSpawn", "mingeban_ranks", function(ply)
 	ply:SetNWString("UserGroup", "user")
 
 	for group, plys in next, mingeban.users do

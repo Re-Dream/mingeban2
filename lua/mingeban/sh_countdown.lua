@@ -2,7 +2,7 @@
 if SERVER then
 	local checkParam = mingeban.utils.checkParam
 
-	util.AddNetworkString("mingeban-countdown")
+	util.AddNetworkString("mingeban_countdown")
 
 	function mingeban.Countdown(time, func, text)
 		checkParam(time, "number", 1, "Countdown")
@@ -14,16 +14,16 @@ if SERVER then
 		local text = isstring(text) and text or tostring(text or "")
 		checkParam(text, "string", 3, "Countdown")
 
-		net.Start("mingeban-countdown")
+		net.Start("mingeban_countdown")
 			net.WriteUInt(time, 16)
 			net.WriteString(text)
 		net.Broadcast()
 
 		local time = CurTime() + time
-		hook.Add("Think", "mingeban-countdown", function()
+		hook.Add("Think", "mingeban_countdown", function()
 			if time < CurTime() then
 				func()
-				hook.Remove("Think", "mingeban-countdown")
+				hook.Remove("Think", "mingeban_countdown")
 			end
 		end)
 
@@ -32,23 +32,23 @@ if SERVER then
 
 	function mingeban.IsCountdownActive()
 		if not hook.GetTable().Think then return false end
-		return hook.GetTable().Think["mingeban-countdown"] and true or false
+		return hook.GetTable().Think["mingeban_countdown"] and true or false
 	end
 
 	function mingeban.AbortCountdown()
-		net.Start("mingeban-countdown")
+		net.Start("mingeban_countdown")
 			net.WriteUInt(0, 16)
 			net.WriteString("")
 		net.Broadcast()
 
 		if mingeban.IsCountdownActive() then
-			hook.Remove("Think", "mingeban-countdown")
+			hook.Remove("Think", "mingeban_countdown")
 		end
 
 		mingeban.LastCountdown = nil
 	end
 
-	hook.Add("MingebanInitialized", "mingeban-countdown", function()
+	hook.Add("MingebanInitialized", "mingeban_countdown", function()
 		local countdown = mingeban.CreateCommand("countdown", function(caller, line, time, text)
 			mingeban.utils.print(mingeban.colors.Cyan, tostring(caller) .. " started countdown" .. (text and " \"" .. text .. "\"" or ""))
 			mingeban.Countdown(time, function() end, text)
@@ -80,7 +80,7 @@ elseif CLIENT then
 		snd = snd or "buttons/button18.wav"
 		EmitSound(snd, LocalPlayer():GetPos(), LocalPlayer():EntIndex(), CHAN_AUTO, vol, 75, 0, pitch)
 	end
-	net.Receive("mingeban-countdown", function()
+	net.Receive("mingeban_countdown", function()
 		local time = net.ReadUInt(16)
 		local text = net.ReadString()
 
@@ -99,7 +99,7 @@ elseif CLIENT then
 	end)
 
 	-- show it
-	surface.CreateFont("mingeban-countdown", {
+	surface.CreateFont("mingeban_countdown", {
 		font = "Roboto Cn",
 		size = 32,
 		weight = 500
@@ -114,7 +114,7 @@ elseif CLIENT then
 		return col
 	end
 	local last
-	hook.Add("HUDPaint", "mingeban-countdown", function()
+	hook.Add("HUDPaint", "mingeban_countdown", function()
 		local cd = mingeban.Countdown
 		if not cd.start or not cd.time then return end
 
@@ -160,7 +160,7 @@ elseif CLIENT then
 		)
 
 		-- text setup
-		surface.SetFont("mingeban-countdown")
+		surface.SetFont("mingeban_countdown")
 		local txt = string.format("%.2d:%06.3f", math.floor(remaining / 60), math.Round(remaining, 3) % 60)
 		local sec = math.ceil(remaining)
 		if last ~= sec then -- everytime the time changes...

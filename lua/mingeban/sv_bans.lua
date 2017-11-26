@@ -36,7 +36,7 @@ function mingeban.Unban(sid)
 	mingeban.SaveBans()
 end
 
-hook.Add("CheckPassword", "mingeban-bans", function(sid)
+hook.Add("CheckPassword", "mingeban_bans", function(sid)
 	sid = util.SteamIDFrom64(sid)
 	local ban = mingeban.Bans[sid]
 

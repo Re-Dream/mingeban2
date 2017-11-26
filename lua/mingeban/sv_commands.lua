@@ -35,7 +35,7 @@ function mingeban.CreateCommand(name, callback)
 	end
 	local cmd = registerCommand(name, callback)
 
-	local func = net.Receivers["mingeban-getcommands"]
+	local func = net.Receivers["mingeban_getcommands"]
 	if func then
 		func(nil, player.GetAll())
 	end
@@ -45,7 +45,7 @@ mingeban.AddCommand = mingeban.CreateCommand
 
 -- command handling
 
-util.AddNetworkString("mingeban-cmderror")
+util.AddNetworkString("mingeban_cmderror")
 
 local function cmdError(ply, reason)
 	-- PrintTable(debug.getinfo(2))
@@ -54,7 +54,7 @@ local function cmdError(ply, reason)
 		return
 	end
 
-	net.Start("mingeban-cmderror")
+	net.Start("mingeban_cmderror")
 		net.WriteString(reason or "")
 	net.Send(ply)
 end
@@ -233,13 +233,13 @@ testargsCmd:AddArgument(ARGTYPE_VARARGS)
 
 -- networking
 
-util.AddNetworkString("mingeban-getcommands")
+util.AddNetworkString("mingeban_getcommands")
 
 function mingeban.NetworkCommands(ply)
 	assert(ply == nil or (IsValid(ply) and ply:IsPlayer()), "bad argument #1 to 'NetworkCommands' (invalid SteamID)")
 
-	timer.Create("mingeban-networkcommands", 1, 1, function()
-		net.Start("mingeban-getcommands")
+	timer.Create("mingeban_networkcommands", 1, 1, function()
+		net.Start("mingeban_getcommands")
 			local commands = table.Copy(mingeban.commands)
 			for name, _ in next, commands do
 				for k, v in next, commands[name] do
@@ -264,15 +264,15 @@ function mingeban.NetworkCommands(ply)
 	end)
 end
 
-hook.Add("PlayerInitialSpawn", "mingeban-commands", function(ply)
+hook.Add("PlayerInitialSpawn", "mingeban_commands", function(ply)
 	mingeban.NetworkCommands(ply)
 end)
 
 -- commands running by chat or console
 
-util.AddNetworkString("mingeban-runcommand")
+util.AddNetworkString("mingeban_runcommand")
 
-net.Receive("mingeban-runcommand", function(_, ply)
+net.Receive("mingeban_runcommand", function(_, ply)
 	local cmd = net.ReadString()
 	local args = net.ReadString()
 	mingeban.RunCommand(cmd, ply, args)
@@ -293,7 +293,7 @@ for _, file in next, (file.Find("mingeban/commands/*.lua", "LUA")) do
 	include("mingeban/commands/" .. file)
 end
 
-hook.Add("PlayerSay", "mingeban-commands", function(ply, txt)
+hook.Add("PlayerSay", "mingeban_commands", function(ply, txt)
 	local prefix = txt:match(mingeban.utils.CmdPrefix)
 
 	if prefix then

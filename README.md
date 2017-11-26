@@ -19,7 +19,7 @@ This might turn into a feature list when the project gets completed.
         - [ ] Chat (not priority)
     - [x] Turn rank checking into some permission system that is not hardcoded?
     - [ ] Write a documentation / guide about their creation. (if needed)
-    - [ ] More types (Rank, Weapon (and their classes)
+    - [ ] More argument types (Rank, Weapon (and their classes))
     - [ ] More player selectors
 - [x] Countdown system
 - [x] Ban system

@@ -216,6 +216,8 @@ function mingeban.RunCommand(name, caller, line)
 end
 mingeban.CallCommand = mingeban.RunCommand
 
+--[[
+
 local testargsCmd = mingeban.CreateCommand("testargs", function(caller, line, ...)
 	print("Line: " .. line)
 	print("Arguments: ")
@@ -230,6 +232,8 @@ testargsCmd:AddArgument(ARGTYPE_BOOLEAN)
 testargsCmd:AddArgument(ARGTYPE_PLAYER)
 testargsCmd:AddArgument(ARGTYPE_PLAYERS)
 testargsCmd:AddArgument(ARGTYPE_VARARGS)
+
+]]
 
 -- networking
 

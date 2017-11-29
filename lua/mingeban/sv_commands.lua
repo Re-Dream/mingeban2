@@ -282,11 +282,13 @@ net.Receive("mingeban_runcommand", function(_, ply)
 	mingeban.RunCommand(cmd, ply, args)
 end)
 
-concommand.Add("mingeban", function(ply, _, cmd, args)
+concommand.Add("mingeban", function(ply, _, cmd, line)
 	local cmd = cmd[1]
 	if not cmd then return end
 
-	local args = args:sub(cmd:len() + 2):Trim()
+	local args = line:Split(" ")
+	table.remove(args, 1)
+	args = table.concat(" "):Trim()
 	mingeban.RunCommand(cmd, ply, args)
 end)
 

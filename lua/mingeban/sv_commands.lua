@@ -288,7 +288,7 @@ concommand.Add("mingeban", function(ply, _, cmd, line)
 
 	local args = line:Split(" ")
 	table.remove(args, 1)
-	args = table.concat(" "):Trim()
+	args = table.concat(args, " "):Trim()
 	mingeban.RunCommand(cmd, ply, args)
 end)
 

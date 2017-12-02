@@ -59,6 +59,7 @@ accessorFunc(Command, "Name", "name", true) -- no don't touch that
 accessorFunc(Command, "Help", "help", CLIENT) -- to use in future help command or something
 accessorFunc(Command, "AllowConsole", "allowConsole", CLIENT)
 accessorFunc(Command, "HideChat", "hideChat", CLIENT)
+accessorFunc(Command, "ArgRankCheck", "argRankCheck", CLIENT)
 
 mingeban.objects.Command = Command
 

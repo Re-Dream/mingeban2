@@ -168,27 +168,27 @@ function mingeban.RunCommand(name, caller, line)
 		end
 	end
 
-	--[[ This should be handled by custom argument filters.
-
-	if type(caller) == "Player" then
+	if type(caller) == "Player" and cmd.argRankCheck then
 		for k, v in next, args do
 			if type(v) == "Player" then
 				if not caller:CheckUserGroupLevel(v:GetUserGroup()) then
-					cmdError(caller, "Can't target this player.")
+					cmdError(caller, "Can't target " .. v:Nick() .. ".")
 					return false
 				end
 			elseif type(v) == "table" then
+				local plyNames = {}
 				for k, ply in next, v do
-					if not caller:CheckUserGroupLevel(ply:GetUserGroup()) then
-						cmdError(caller, "Can't target " .. ply:Nick() .. ".")
+					if ply:IsPlayer() and not caller:CheckUserGroupLevel(ply:GetUserGroup()) then
+						plyNames[#plyNames + 1] = ply:Nick()
 						v[k] = nil
 					end
+				end
+				if #plyNames > 0 then
+					cmdError(caller, "Can't target " .. table.concat(plyNames, ", ") .. ".")
 				end
 			end
 		end
 	end
-
-	]]
 
 	local ok, reason = hook.Run("MingebanCommand", caller, name, line, unpack(args or {}))
 	if ok == false then

@@ -160,7 +160,7 @@ function PLAYER:CheckUserGroupLevel(name)
 	checkParam(name, "string", 1, "CheckUserGroupLevel")
 
 	local plyRank = mingeban.GetRank(self:GetUserGroup())
-	if plyRank.level then return true end
+	if plyRank.root then return true end
 
 	local rank = mingeban.GetRank(name)
 	if not rank then return true end

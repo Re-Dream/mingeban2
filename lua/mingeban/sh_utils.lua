@@ -77,7 +77,6 @@ function mingeban.utils.parseArgs(str) -- featuring no continues and better pars
 						ret[#ret + 1] = arg
 					end
 				end
-
 			end
 		end
 	end
@@ -130,10 +129,8 @@ function mingeban.utils.findEntity(fullStr)
 		end
 
 		for _, ply in next, plys do
-			if str:StartWith("STEAM_0:") then
-				if ply:SteamID() == str:upper() then
-					found[#found + 1] = ply
-				end
+			if str:StartWith("STEAM_0:") and ply:SteamID() == str:upper() then
+				found[#found + 1] = ply
 			end
 
 			if ply:Nick():lower():match(str:lower()) then

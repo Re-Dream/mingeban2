@@ -8,14 +8,6 @@ local Command = mingeban.objects.Command
 
 -- command registering process
 
-local function registerCommand(name, callback)
-	mingeban.commands[name] = setmetatable({
-		callback = callback, -- caller, line, ...
-		args = {},
-		name = istable(name) and name[1] or name,
-	}, Command)
-	return mingeban.commands[name]
-end
 function mingeban.CreateCommand(name, callback)
 	checkParam(callback, "function", 2, "CreateCommand")
 
@@ -33,13 +25,16 @@ function mingeban.CreateCommand(name, callback)
 			end
 		end
 	end
-	local cmd = registerCommand(name, callback)
+	mingeban.commands[name] = setmetatable({
+		callback = callback, -- caller, line, ...
+		args = {},
+		name = istable(name) and name[1] or name,
+		aliases = istable(name) and name or nil
+	}, Command)
 
-	local func = net.Receivers["mingeban_getcommands"]
-	if func then
-		func(nil, player.GetAll())
-	end
-	return cmd
+	mingeban.NetworkCommands()
+
+	return mingeban.commands[name]
 end
 mingeban.AddCommand = mingeban.CreateCommand
 

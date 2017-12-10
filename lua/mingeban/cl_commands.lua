@@ -18,12 +18,10 @@ function mingeban.ConsoleAutoComplete(_, args)
 		if cmdData then
 			local curArg = argsTbl[#argsTbl]
 			local argData = cmdData.args[#argsTbl]
-			if argData then
-				if argData.type == ARGTYPE_PLAYER then
-					for _, ply in next, player.GetAll() do
-						if ('"' .. ply:Nick() .. '"'):lower():match(curArg) then
-							autoComplete[#autoComplete + 1] = '"' .. ply:Nick() .. '"' -- autocomplete nick
-						end
+			if argData and argData.type == ARGTYPE_PLAYER then
+				for _, ply in next, player.GetAll() do
+					if ('"' .. ply:Nick() .. '"'):lower():match(curArg) then
+						autoComplete[#autoComplete + 1] = '"' .. ply:Nick() .. '"' -- autocomplete nick
 					end
 				end
 			end

@@ -54,10 +54,7 @@ function mingeban.ConsoleAutoComplete(_, args)
 end
 
 net.Receive("mingeban_getcommands", function()
-	local commands
-	local succ = pcall(function()
-		commands = net.ReadTable()
-	end)
+	local commands = net.ReadTable()
 
 	for name, cmd in next, commands do
 		for k, arg in next, cmd.args do

@@ -140,7 +140,7 @@ function mingeban.GetRank(name)
 	checkParam(name, "string", 1, "GetRank")
 
 	for level, rank in next, mingeban.ranks do
-		if rank.name == name:lower() then
+		if rank.name:lower() == name:lower() then
 			return mingeban.ranks[level]
 		end
 	end

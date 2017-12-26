@@ -24,7 +24,7 @@ function mingeban.DeleteRank(name)
 	assert(istable(mingeban.GetRank(name)), "rank with name " .. name .. " doesn't exist!")
 
 	for level, rank in next, mingeban.ranks do
-		if rank:GetName() == name:lower() then
+		if rank.name:lower() == name:lower() then
 			for sid, _ in next, rank.users do
 				local ply = player.GetBySteamID(sid)
 				if IsValid(ply) then

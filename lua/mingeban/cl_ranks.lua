@@ -2,11 +2,7 @@
 local Rank = mingeban.objects.Rank
 
 net.Receive("mingeban_getranks", function()
-	local ranks
-	local succ = pcall(function()
-		ranks = net.ReadTable()
-	end)
-
+	local ranks = net.ReadTable()
 	local users = net.ReadTable()
 
 	for level, rank in next, ranks do

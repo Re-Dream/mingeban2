@@ -106,7 +106,16 @@ function mingeban.GetCommand(name)
 	return cmd
 end
 function mingeban.GetCommands()
-	local cmds = mingeban.commands
+	local cmds = {}
+	for name, data in next, mingeban.commands do
+		if istable(name) then
+			for _, name in next, name do
+				cmds[name] = data
+			end
+		else
+			cmds[name] = data
+		end
+	end
 	--[[
 	local cmds = noDupes and {} or mingeban.commands
 	if noDupes then

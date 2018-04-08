@@ -3,8 +3,8 @@ local checkParam = mingeban.utils.checkParam
 local accessorFunc = mingeban.utils.accessorFunc
 local validSteamID = mingeban.utils.validSteamID
 
-mingeban.ranks = {}
-mingeban.users = {}
+mingeban.ranks = mingeban.ranks or {}
+mingeban.users = mingeban.users or {}
 
 local Rank = {}
 Rank.__index = Rank
